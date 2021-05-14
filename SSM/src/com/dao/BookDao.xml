@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.BookDao">
+
+<!--查询-->
+    <select id="bookList" resultType="com.entity.Book" parameterType="map">
+         select bid,bname,bprice,bpublisher,bpublishdate from bookinfo where 1=1
+        <if test="bname !=null and bname != ''">
+            AND bname like concat(#{bname},'%')
+        </if>
+        <if test="bpublisher !=null and bpublisher != ''">
+            AND bpublisher = #{bpublisher}
+        </if>
+        <if test="bpublishDateStart !=null and bpublishDateStart != ''">
+            AND bpublishdate &gt;= #{bpublishDateStart}
+        </if>
+        <if test="bpublishDateEnd !=null and bpublishDateEnd != ''">
+            AND bpublishdate &lt;= #{bpublishDateEnd}
+        </if>
+         order by bctimestamp desc limit #{start},#{pageSize}
+    </select>
+
+<!--分页-->
+    <select id="countBooks" resultType="java.lang.Long" parameterType="map">
+        select count(*) from bookinfo where 1=1
+        <if test="bname !=null and bname != ''">
+            AND bname like concat(#{bname},'%')
+        </if>
+        <if test="bpublisher !=null and bpublisher != ''">
+            AND bpublisher = #{publisher}
+        </if>
+        <if test="bpublishDateStart !=null and bpublishDateStart != ''">
+            AND bpublishdate &gt;= #{bpublishDateStart}
+        </if>
+        <if test="bpublishDateEnd !=null and bpublishDateEnd != ''">
+            AND bpublishdate &lt;= #{publishDateEnd}
+        </if>
+    </select>
+
+<!--增加-->
+    <insert id="createBook" parameterType="com.entity.Book">
+        insert into bookinfo (bname,bprice,bpublisher,bpublishdate,creater)
+        value (#{bname},#{bprice},#{bpublisher},#{bpublishdate},#{accountId})
+    </insert>
+
+<!--删除-->
+    <delete id="deletebook" parameterType="int">
+         delete from bookinfo where bid=#{bid}
+    </delete>
+
+<!--更新查询-->
+    <select id="previewBook" resultType="com.entity.Book" parameterType="int">
+         select bid,bname,bprice,bpublisher,bpublishdate from  bookinfo where bid=#{bid}
+    </select>
+
+<!--更新-->
+    <update id="updataBook" parameterType="com.entity.Book">
+        update bookinfo set
+        bname=#{bname},
+        bprice=#{bprice},
+        bpublisher=#{bpublisher},
+        bpublishdate=#{bpublishdate},
+        creater=#{accountId}
+        where bid=#{bid}
+    </update>
+</mapper>

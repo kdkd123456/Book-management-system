@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>新增图书</title>
+  <link rel="stylesheet" href="../assets/bookstrap/css/bootstrap.css">
+  <script src="../assets/jquery-3.2.1/jquery.min.js"></script>
+  <script src="../assets/bookstrap/js/bootstrap.js"></script>
+  <script src="../assets/My97DatePicker/4.8/WdatePicker.js"></script>
+<script>
+    $(function(){
+      let $bookName= false;
+      let $bookPrice=false;
+      let $publisher=false;
+      let $publishDate=false;
+         $("input").mouseout(function(){
+           if($(this).attr("id")==="bookName"){
+             if($(this).val()===""){
+               $bookName= isInvalid($(this));
+             }else{
+               $bookName=isValid($(this));
+               checkForm($bookName,$bookPrice,$publisher,$publishDate);
+             }
+           }
+
+           if($(this).attr("id")==="bookPrice"){
+             let reg=/^[^0]\d*.\d{2}$/;
+             if(reg.test($(this).val())!==true){
+               $bookPrice= isInvalid($(this));
+             }else{
+               $bookPrice=isValid($(this));
+               checkForm($bookName,$bookPrice,$publisher,$publishDate);
+             }
+           }
+          });
+
+         $("#publishDate").focusin(function(){
+               if($(this).val()===""){
+                 $publishDate= isInvalid($(this));
+               }else{
+                 $publishDate=isValid($(this));
+                 checkForm($bookName,$bookPrice,$publisher,$publishDate);
+               }
+         })
+
+         $("#publisher").mouseout(function(){
+            if($(this).val()===""){
+              $publisher= isInvalid($(this));
+            }else{
+              $publisher=isValid($(this));
+              checkForm($bookName,$bookPrice,$publisher,$publishDate);
+            }
+
+         })
+
+    })
+    function isInvalid(obj){
+      $("#submit").attr("disabled","disabled");
+      obj.removeClass("is-valid");
+      obj.addClass("is-invalid");
+      return false;
+    }
+    function isValid(obj){
+      obj.removeClass("is-invalid");
+      obj.addClass("is-valid");
+      return true;
+    }
+
+    function checkForm($bookName,$bookPrice,$publisher,$publishDate) {
+      if ($bookName === true && $bookPrice === true && $publisher === true && $publishDate === true) {
+        $("#submit").removeAttr("disabled");
+      }
+    }
+</script>
+
+</head>
+<body style="width:98%">
+<!--面包屑-->
+<nav class="breadcrumb">
+  <a class="breadcrumb-item" href="#">功能</a>
+  <a class="breadcrumb-item" href="createAccount_blur.html">创建图书</a>
+  <a href="booksList.html" class="ml-auto font-weight-bold">返回图书管理</a>
+</nav>
+
+
+<form class="text-center" action="./booksList.html" method="post">
+  <div class="form-group row">
+    <label for="bookName" class="col-sm-2 col-form-label ">书名:</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="bookName" id="bookName" placeholder="书名">
+      <div class="valid-feedback">
+      </div>
+      <div class="invalid-feedback">
+        请填写书名！
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="bookPrice" class="col-sm-2 col-form-label">价格:</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name="bookPrice" id="bookPrice" placeholder="保留两位小数">
+      <div class="valid-feedback">
+      </div>
+      <div class="invalid-feedback">
+        请填写价格或第一位非零只保留两位小数！
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="form-group row">
+    <label for="publisher" class="col-sm-2 col-form-label">出版社:</label>
+    <div class="col-sm-4">
+      <select class="form-control" id="publisher">
+        <option value="">选择出版</option>
+        <option value="1">人民邮电出版社</option>
+        <option value="2">清华大学出版社</option>
+      </select>
+      <div class="valid-feedback">
+      </div>
+      <div class="invalid-feedback">
+        请选择出版社！
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="publishDate" class="col-sm-2 col-form-label">出版日期:</label>
+    <div class="col-sm-4">
+      <input type="text" id="publishDate" name="publishDate" class="form-control"
+             onfocus="WdatePicker({})"   />
+      <div class="valid-feedback">
+      </div>
+      <div class="invalid-feedback">
+        请输入出版日期！
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row" style="margin-right: 200px">
+    <div class="col-sm-10">
+      <a href="createAccount.html" type="button" class="btn btn-primary btn-outline-secondary" >重置</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button id="submit" type="submit" class="btn btn-primary" disabled="disabled">提交</button>
+    </div>
+  </div>
+</form>
+
+</body>
+</html>

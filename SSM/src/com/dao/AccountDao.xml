@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.AccountDao">
+
+<!--登录账号/密码验证-->
+    <select id="checkAccount"
+            parameterType="com.entity.Account"
+            resultType="com.entity.Account">
+                select * from  accounttab where
+                accountName=#{accountName} and
+                accountPassword=#{accountPassword}
+    </select>
+
+<!--查询原密码是否正确-->
+    <select id="selAt"
+            parameterType="com.entity.Account"
+            resultType="com.entity.Account">
+                select * from  accounttab where
+                accountName=#{accountName} and
+                accountPassword=#{accountPassword}
+    </select>
+
+<!--更改密码-->
+    <update id="updata" parameterType="com.entity.Account">
+            update accounttab set
+            accountPassword=#{atPassword}
+            where accountName=#{accountName}
+    </update>
+
+<!--修改密码-->
+    <update id="updataAccount" parameterType="map">
+            update accounttab set
+            accountPassword=#{atPassword}
+            where accountId=#{accountId} and
+            accountPassword=#{accountPassword}
+    </update>
+
+<!--用户查询-->
+    <select id="sAt" resultType="com.entity.Account" parameterType="map">
+        select * from accounttab where 1=1
+        <if test="accountName !=null and accountName != ''">
+            AND accountName=#{accountName}
+        </if>
+        <if test="nickName !=null and nickName != ''">
+            AND nickName=#{nickName}
+        </if>
+        order by accountId DESC limit #{start},#{pageSize}
+    </select>
+
+<!--计算总页数-->
+    <select id="countAccounts" parameterType="map" resultType="long">
+        select count(*) from accounttab where 1=1
+        <if test="accountName !=null and accountName != ''">
+            AND accountName=#{accountName}
+        </if>
+        <if test="nickName !=null and nickName != ''">
+            AND nickName=#{nickName}
+        </if>
+    </select>
+
+<!--新增用户-->
+    <insert id="createA" parameterType="com.entity.Account">
+         insert into accounttab (accountName,accountPassword,nickName)
+         value (#{accountName},#{accountPassword},#{nickName})
+    </insert>
+
+<!--删除-->
+    <delete id="deletes" parameterType="int">
+        delete from accounttab where accountId=#{accountId}
+    </delete>
+
+<!--更新查询-->
+    <select id="previewAccount" resultType="com.entity.Account" parameterType="int">
+         select * from  accounttab where accountId=#{accountId}
+    </select>
+
+<!--更新-->
+    <update id="updataUser" parameterType="com.entity.Account">
+        update accounttab set
+        accountName=#{accountName},
+        accountPassword=#{accountPassword},
+        nickName=#{nickName}
+        where accountId=#{accountId}
+    </update>
+</mapper>
